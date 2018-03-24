@@ -6,6 +6,8 @@ body {
 
 h1, h2, h3 {
     font-family: 'Roboto Slab', sans-serif;
+
+    margin-bottom: 20px;
 }
 
 h1 {

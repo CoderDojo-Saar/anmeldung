@@ -1,0 +1,21 @@
+body {
+    margin: 10px;
+
+    font-family: 'Raleway', sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Roboto Slab', sans-serif;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2.8em;
+}
+
+h3 {
+    font-size: 2.5em;
+}

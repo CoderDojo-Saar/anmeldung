@@ -7,13 +7,6 @@ root = true
 [*]
 end_of_line = lf
 insert_final_newline = true
-
-# Matches multiple files with brace expansion notation
-# Set default charset
-[*.{js,html,css}]
+indent_size = 2
+indent_style = space
 charset = utf-8
-
-# Tab indentation
-[Makefile]
-indent_style = tab
-indent_size = 4

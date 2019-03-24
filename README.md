@@ -1,5 +1,16 @@
-# Anmeldeformular
-Das Anmeldeformular des CoderDojo Saar
+# anmeldung
 
-## Commit-Emojis
-Die Emojis in Commit-Namen folgen diesen Regeln: https://gitmoji.carloscuesta.me/
+## Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```

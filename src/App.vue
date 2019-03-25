@@ -2,7 +2,7 @@
   <div id="app">
     <div class="centered-container">
       <h1>Anmeldung zum CoderDojo Saar</h1>
-      <form action="javascript:void(0)">
+      <form @submit.prevent="submit">
         <label
           v-for="field in Object.values(fields)" :key="field.id"
           :for="field.id"
@@ -13,15 +13,13 @@
             :id="field.id"
             :type="field.type || 'text'"
             v-model="field.value"
-            @input="field.error = (field.validate && field.validate(field.value)) || null"
+            @blur="validateField(field)"
           >
           {{ field.type === "checkbox" ? field.title : "" }}
-          <template v-if="field.description || field.error">
-            <transition name="fade" mode="out-in">
-              <small v-if="!field.error" key="description">{{ field.description }}</small>
-              <small v-else class="error" key="error">{{ field.error }}</small>
-            </transition>
-          </template>
+          <transition name="vertical" mode="out-in">
+            <small v-if="!field.error" key="description">{{ field.description }}</small>
+            <small v-else class="error" key="error">{{ field.error }}</small>
+          </transition>
         </label>
 
         <p>
@@ -29,13 +27,15 @@
           Du kannst den Text gerne nochmal abändern oder etwas hinzufügen, aber vergiss nicht, ihn abzusenden!
         </p>
 
-        <button>Bestätigen</button>
+        <button type="submit">Bestätigen</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+  import Vue from "vue";
+
   export default {
     name: "app",
     components: {},
@@ -103,28 +103,36 @@
           value: false
         }
       ]
-    })
+    }),
+    methods: {
+      validateField(field) {
+        Vue.set(field, "error", (field.validate && field.validate(field.value)) || null);
+      },
+      submit() {
+        this.fields.forEach(this.validateField);
+      }
+    }
   };
 </script>
 
 <style scoped lang="scss">
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.2s, transform 0.4s;
+  .vertical-enter-active, .vertical-leave-active {
+    transition: opacity 0.2s, transform 0.2s;
   }
 
-  .fade-enter {
+  .vertical-enter {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-2px);
   }
 
-  .fade-enter-to, .fade-leave {
+  .vertical-enter-to, .vertical-leave {
     opacity: 1;
     transform: translateY(0px);
   }
 
-  .fade-leave-to {
+  .vertical-leave-to {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(6px);
   }
 
   #app {

@@ -2,7 +2,7 @@
   <div id="app">
     <div class="centered-container">
       <h1>Anmeldung zum CoderDojo Saar</h1>
-      <form @submit.prevent="submit">
+      <form @submit.prevent="open">
         <label
           v-for="field in Object.values(fields)" :key="field.id"
           :for="field.id"
@@ -24,10 +24,22 @@
 
         <p>
           Wenn du auf den Button klickst, öffnet sich dein Email-Programm.
-          Du kannst den Text gerne nochmal abändern oder etwas hinzufügen, aber vergiss nicht, ihn abzusenden!
+          Du kannst den Text gerne nochmal abändern oder etwas hinzufügen, <b>aber vergiss nicht, ihn abzusenden</b>!
+        </p>
+        <button type="submit">Bestätigen</button>
+
+        <p>
+          Wenn der Button nicht funktioniert, kannst du auch <a @click="showTextarea = true">hier klicken</a>, um den
+          Text anzuzeigen,
+          sodass du ihn <b>selbst kopieren und in deinem Email-Programm einfügen</b> kannst.
         </p>
 
-        <button type="submit">Bestätigen</button>
+        <textarea
+          id="copy-area"
+          readonly
+          v-show="showTextarea"
+          v-text="generatedText"
+        ></textarea>
       </form>
     </div>
   </div>
@@ -35,16 +47,18 @@
 
 <script>
   import Vue from "vue";
+  import mailto from "mailto-link";
 
   export default {
     name: "app",
     components: {},
     data: () => ({
+      showTextarea: false,
       fields: [
         {
           id: "first-name",
           type: "text",
-          title: "Dein Vorname",
+          title: "Vorname",
           description: "Damit wir wissen, wie wir dich nennen sollen.",
           value: "",
           validate(value) {
@@ -54,7 +68,7 @@
         {
           id: "last-name",
           type: "text",
-          title: "Dein Nachname",
+          title: "Nachname",
           value: "",
           validate(value) {
             return value === "" ? "Dieses Feld darf nicht leer sein." : null;
@@ -63,7 +77,7 @@
         {
           id: "age",
           type: "number",
-          title: "Dein Alter",
+          title: "Alter",
           value: "",
           validate(value) {
             if (value === "") {
@@ -84,7 +98,7 @@
         {
           id: "email",
           type: "email",
-          title: "Deine Email-Adresse",
+          title: "Email-Adresse",
           description: "Falls du keine eigene Email-Adresse hast, gib einfach die deiner Eltern an.",
           value: "",
           validate(value) {
@@ -100,7 +114,10 @@
           type: "checkbox",
           title: "Ich habe ein eigenes Laptop",
           description: "Falls nicht, leihen wir dir gerne eins aus.",
-          value: false
+          value: false,
+          transformValue(value) {
+            return value ? "Ja" : "Nein";
+          }
         }
       ]
     }),
@@ -108,8 +125,27 @@
       validateField(field) {
         Vue.set(field, "error", (field.validate && field.validate(field.value)) || null);
       },
-      submit() {
+      open() {
         this.fields.forEach(this.validateField);
+
+        if (this.fields.some(field => field.error !== null)) return;
+
+        const body = this.generatedText;
+
+        const link = mailto({
+          to: "hello@coderdojo-saar.de",
+          subject: `Anmeldung von ${this.fields[0]} ${this.fields[1]}`,
+          body
+        });
+
+        window.open(link, "_self");
+      }
+    },
+    computed: {
+      generatedText() {
+        return this.fields.map(
+          field => `${field.title}: ${(field.transformValue && field.transformValue(field.value)) || field.value}`
+        ).join("\n\n");
       }
     }
   };
@@ -232,6 +268,11 @@
 
   p {
     color: #2a2a2a;
+
+    a {
+      color: #1c679a;
+      cursor: pointer;
+    }
   }
 
   button {
@@ -249,6 +290,13 @@
     &:hover, &:focus {
       background-color: #f5f5f5;
     }
+  }
+
+  #copy-area {
+    width: 100%;
+    height: 170px;
+
+    resize: none;
   }
 </style>
 

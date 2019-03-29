@@ -131,10 +131,9 @@
         if (this.fields.some(field => field.error !== null)) return;
 
         const body = this.generatedText;
-
         const link = mailto({
           to: "hello@coderdojo-saar.de",
-          subject: `Anmeldung von ${this.fields[0]} ${this.fields[1]}`,
+          subject: `Anmeldung von ${this.fields[0].value} ${this.fields[1].value}`,
           body
         });
 

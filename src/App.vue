@@ -112,8 +112,8 @@
         {
           id: "own-laptop",
           type: "checkbox",
-          title: "Ich habe ein eigenes Laptop",
-          description: "Falls nicht, leihen wir dir gerne eins aus.",
+          title: "Ich benötige ein Leih-Laptop",
+          description: "Falls dir kein eigenes Laptop zur Verfügung steht, leihen wir dir gerne eins aus.",
           value: false,
           transformValue(value) {
             return value ? "Ja" : "Nein";

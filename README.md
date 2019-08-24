@@ -14,3 +14,8 @@ yarn serve
 ```
 yarn build
 ```
+
+### Deploys to Github Pages
+```
+yarn deploy
+```
